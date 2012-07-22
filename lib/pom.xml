@@ -1,0 +1,120 @@
+<project xmlns="http://maven.apache.org/project.4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/project.4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.whitewerx.felix-osgi-example</groupId>
+		<artifactId>felix-osgi-example.parent</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<groupId>com.whitewerx.felix-osgi-example.lib</groupId>
+	<artifactId>felix-osgi-example.lib</artifactId>
+	<packaging>bundle</packaging>
+
+	<name>${project.artifactId}</name>
+	<description>
+        An example of an OSGi bundle to debug
+    </description>
+    
+    <properties>
+    	<bundleActivatorClass>com.whitewerx.felixosgiexample.Activator</bundleActivatorClass>
+    </properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.3.7</version>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<id>bundle-binary</id>
+						<goals>
+							<goal>bundle</goal>
+						</goals>
+						<configuration>
+							<excludeDependencies></excludeDependencies>
+							<manifestLocation>${project.build.directory}/src-generated/resources/java/META-INF</manifestLocation>
+							<instructions>
+								<Bundle-Activator>${bundleActivatorClass}</Bundle-Activator>
+								<Bundle-Name>${project.artifactId}</Bundle-Name>
+								<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+							</instructions>
+						</configuration>
+					</execution>
+					<execution>
+						<id>bundle-sources</id>
+						<goals>
+							<goal>bundle</goal>
+						</goals>
+						<configuration>
+							<classifier>sources</classifier>
+							<excludeDependencies></excludeDependencies>
+							<manifestLocation>${project.build.directory}/bnd.source</manifestLocation>
+							<instructions>
+								<!-- http://www.aqute.biz/Bnd/Format -->
+								<_removeheaders>Bundle-Activator,Include-Resource,Export-Package,Private-Package,Import-Package</_removeheaders>
+								<Bundle-Name>${project.artifactId}.source</Bundle-Name>
+								<Bundle-SymbolicName>${project.artifactId}.source</Bundle-SymbolicName>
+								<Include-Resource>${basedir}/src/main/java,{maven-resources}</Include-Resource>
+								<Eclipse-SourceBundle>${project.artifactId};version="${project.version}";roots:="."</Eclipse-SourceBundle>
+								<Export-Package>!*</Export-Package>
+								<Private-Package>!*</Private-Package>
+								<_donotcopy>.*.class</_donotcopy>
+							</instructions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<version>4.3.0</version>
+		</dependency>
+				<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.6</version>
+		</dependency>
+		
+		<!-- Test -->
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock</artifactId>
+			<version>2.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-junit4</artifactId>
+			<version>2.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-core</artifactId>
+			<version>1.2.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+			<version>1.2.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
+

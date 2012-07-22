@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/project.4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/project.4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.whitewerx.felix-osgi-example</groupId>
+    <artifactId>felix-osgi-example.parent</artifactId>
+    <version>1.0.0</version>
+    <name>${project.artifactId} pom</name>
+    <description>
+        An example runtime for debuging an OSGi bundle in Eclipse.
+
+        Based on concepts from:
+        http://maksim.sorokin.dk/it/2011/07/19/maven-apache-felix-easy-development-and-debugging-with-eclipse/
+    </description>
+    <packaging>pom</packaging>
+
+    <organization>
+        <name>White Werx</name>
+        <url>http://whitewerx.com</url>
+    </organization>
+
+    <modules>
+        <module>lib</module>
+        <module>runtime</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Ignore/Execute plugin execution -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <!-- copy-dependency plugin -->
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>[1.0.0,)</versionRange>
+                                        <goals>
+                                            <goal>copy-dependencies</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
+

@@ -1,0 +1,172 @@
+<project xmlns="http://maven.apache.org/project.4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/project.4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.whitewerx.felix-osgi-example</groupId>
+		<artifactId>felix-osgi-example.parent</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<groupId>com.whitewerx.felix-osgi-example.runtime</groupId>
+	<artifactId>felix-osgi-smample.runtime</artifactId>
+	<packaging>jar</packaging>
+
+	<name>${project.artifactId} pom</name>
+	<description>
+        Provides the runtime environment for the bundles.
+
+        The PAX assembly URLs are created off of the Maven Dependencies
+        list excluding any bundles that have been copied to the Felix
+        'bundle' auto start directory.
+
+        You must specify a list of auto.start.excludedGroupIds.  This list
+        should contain the groups of code you would not like copied into
+        the 'bundle' auto start directory.  And thus is the code you would
+        like to load directly from it's resolved Maven Dependency location:
+           a) project/target/classes
+           b) the m2 repository.
+    </description>
+
+	<properties>
+		<auto.start.excludeGroupIds>com.whitewerx.felix-osgi-example.lib</auto.start.excludeGroupIds>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>copy-felix-configuration</id>
+						<phase>package</phase>
+						<configuration>
+							<tasks>
+								<mkdir dir="${project.build.directory}/felix/conf" />
+								<copy file="conf/config.properties"
+									tofile="${project.build.directory}/felix/conf/config.properties"
+									failonerror="false" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>populate-felix-lib-dir</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/felix/lib</outputDirectory>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.apache.felix</groupId>
+									<artifactId>org.apache.felix.main</artifactId>
+									<version>4.0.3</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.felix</groupId>
+									<artifactId>org.apache.felix.main</artifactId>
+									<version>4.0.3</version>
+									<classifier>sources</classifier>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+					<execution>
+						<id>populate-felix-bundle-dir</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/felix/bundle</outputDirectory>
+							<!-- This is the magic bit, you need to exclude the groups of code 
+								you want to run exploded. -->
+							<excludeGroupIds>${auto.start.excludeGroupIds}</excludeGroupIds>
+							<excludeArtifactIds>org.apache.felix.main,org.apache.felix.framework</excludeArtifactIds>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<!--
+			The are first class dependencies for code you are directly
+			working on.
+			
+			Don't forget to add these groupId's to the auto.start.excludeGroupIds
+		-->
+		<dependency>
+			<groupId>com.whitewerx.felix-osgi-example.lib</groupId>
+			<artifactId>felix-osgi-example.lib</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+
+
+		<!-- Felix -->
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.main</artifactId>
+			<version>4.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.framework</artifactId>
+			<version>4.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ops4j.pax.url</groupId>
+			<artifactId>pax-url-assembly</artifactId>
+			<version>1.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.compendium</artifactId>
+			<version>4.3.0</version>
+		</dependency>
+
+		<!-- Third Party Bundles -->
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.log</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.gogo.command</artifactId>
+			<version>0.12.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.gogo.shell</artifactId>
+			<version>0.10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.6</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+	</dependencies>
+</project>
+
