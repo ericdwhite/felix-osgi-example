@@ -28,9 +28,9 @@ This property controls which artefacts from the dependency list are EXCLUDED fro
 
 In this sample project it is set to
 
-  <properties>
-    <auto.start.excludeGroupIds>com.whitewerx.felix-osgi-example.lib</auto.start.excludeGroupIds>
-  </properties>
+    <properties>
+      <auto.start.excludeGroupIds>com.whitewerx.felix-osgi-example.lib</auto.start.excludeGroupIds>
+    </properties>
 
 This means that any artifact with the 'com.whitewerx.felix-osgi-example.lib' will not be copied into
 the 'felix.auto.deploy.dir' and is thus a target for a PAX assembly URL.
@@ -50,34 +50,33 @@ to run the sample once a 'maven install' build has occurred at the top level.
 
 The key properties of the launcher are:
 
-  Main: com.whitewerx.felixosgiexample.runtime.Main
-  VM Arguments: -Djava.protocol.handler.pkgs=org.ops4j.pax.url -Dfelix.config.properties=file:conf/config.properties
-  Working Directory: ${workspace_loc:felix-osgi-example.runtime/target/felix}
+    Main: com.whitewerx.felixosgiexample.runtime.Main
+    VM Arguments: -Djava.protocol.handler.pkgs=org.ops4j.pax.url -Dfelix.config.properties=file:conf/config.properties
+    Working Directory: ${workspace_loc:felix-osgi-example.runtime/target/felix}
 
 The most important is '-Djava.protocol.handler.pkgs=org.ops4j.pax.url' which in conjunction with a Bundle Activator
 included in 'pax-url-assembly' jar tells Felix how to read bundles from assembly URLs.
 
 Launching from Eclipse looks like:
 
-  [BOOT] Excluding from assembly: file:~/github/felix-osgi-example/runtime/target/classes/
-  [BOOT] Excluding from assembly: file:~/.m2/repository/org/osgi/org.osgi.core/4.3.0/org.osgi.core-4.3.0.jar
-  [BOOT] Excluding from assembly: file:~/.m2/repository/org/apache/felix/org.apache.felix.main/4.0.3/org.apache.felix.main-4.0.3.jar
-  …
-  [BOOT] Excluding from assembly: file:~/.m2/repository/ch/qos/logback/logback-classic/1.0.6/logback-classic-1.0.6.jar
-  [BOOT] Excluding from assembly: file:~/.m2/repository/ch/qos/logback/logback-core/1.0.6/logback-core-1.0.6.jar
-  [BOOT] Felix auto start:
-  felix.auto.start.1 = \
-   \
-    assembly:~/github/felix-osgi-example/lib/target/classes/
-  [BOOT] Actual property:
-  felix.auto.start.1= assembly:~/github/felix-osgi-example/lib/target/classes/
-  08:04:37.136 [FelixStartLevel] INFO  c.w.felixosgiexample.Activator - Start: com.whitewerx.felixosgiexample.Activator
-  08:04:37.140 [FelixStartLevel] INFO  c.w.felixosgiexample.Activator - The chemical formula for Water is: H2O
-  08:04:37.385 [FelixStartLevel] DEBUG o.o.p.u.c.handler.HandlerActivator - Handler for protocols [assembly, assemblyref] started
-  ____________________________
-  Welcome to Apache Felix Gogo
-  
-  g!
+    [BOOT] Excluding from assembly: file:~/github/felix-osgi-example/runtime/target/classes/
+    [BOOT] Excluding from assembly: file:~/.m2/repository/org/osgi/org.osgi.core/4.3.0/org.osgi.core-4.3.0.jar
+    [BOOT] Excluding from assembly: file:~/.m2/repository/org/apache/felix/org.apache.felix.main/4.0.3/org.apache.felix.main-4.0.3.jar
+    ...
+    [BOOT] Excluding from assembly: file:~/.m2/repository/ch/qos/logback/logback-classic/1.0.6/logback-classic-1.0.6.jar
+    [BOOT] Excluding from assembly: file:~/.m2/repository/ch/qos/logback/logback-core/1.0.6/logback-core-1.0.6.jar
+    [BOOT] Felix auto start:
+    felix.auto.start.1 = \
+     \
+      assembly:~/github/felix-osgi-example/lib/target/classes/
+    [BOOT] Actual property:
+    felix.auto.start.1= assembly:~/github/felix-osgi-example/lib/target/classes/
+    08:04:37.136 [FelixStartLevel] INFO  c.w.felixosgiexample.Activator - Start: com.whitewerx.felixosgiexample.Activator
+    08:04:37.140 [FelixStartLevel] INFO  c.w.felixosgiexample.Activator - The chemical formula for Water is: H2O
+    08:04:37.385 [FelixStartLevel] DEBUG o.o.p.u.c.handler.HandlerActivator - Handler for protocols [assembly, assemblyref] started
+    ____________________________
+    Welcome to Apache Felix Gogo
+    g!
 
 Note the PAX assembly URL for felix-osgi-example/lib!
 
@@ -89,11 +88,11 @@ directly and all the bundles resolved.
 
 Notice the BundleActivator start/stop calls for the felix-osgi-example.lib bundle.
 
-  felix-osgi-example $ mvn clean install -Dauto.start.excludeGroupIds=
-
-  felix-osgi-example $ cd runtime/target/felix
-  felix $ java -jar lib/org.apache.felix.main-4.0.3.jar org.apache.felix.main.Main
-
+    felix-osgi-example $ mvn clean install -Dauto.start.excludeGroupIds=
+    
+    felix-osgi-example $ cd runtime/target/felix
+    felix $ java -jar lib/org.apache.felix.main-4.0.3.jar org.apache.felix.main.Main
+    
     20:25:10.682 [FelixStartLevel] INFO  c.w.felixosgiexample.Activator - Start: com.whitewerx.felixosgiexample.Activator
     20:25:10.687 [FelixStartLevel] INFO  c.w.felixosgiexample.Activator - The chemical formula for Water is: H2O
     20:25:10.938 [FelixStartLevel] DEBUG o.o.p.u.c.handler.HandlerActivator - Handler for protocols [assembly, assemblyref] started
@@ -104,8 +103,8 @@ Notice the BundleActivator start/stop calls for the felix-osgi-example.lib bundl
     g! gosh: stopping framework
     20:25:39.853 [FelixStartLevel] DEBUG o.o.p.u.c.handler.HandlerActivator - Handler for protocols [assembly, assemblyref] stopped
     20:25:39.858 [FelixStartLevel] INFO  c.w.felixosgiexample.Activator - Stop: com.whitewerx.felixosgiexample.Activator
-
-  felix$
+    
+    felix$
 
 # Resources
 
